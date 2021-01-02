@@ -1,6 +1,6 @@
 # AppStarter
 
-A TODO starter project using Node and MongoDB for the backend with native iOS and React clients.
+A TODO starter project using Node and MongoDB with native iOS and React clients.
 
 Web           |  iOS
 :-------------------------:|:-------------------------:
