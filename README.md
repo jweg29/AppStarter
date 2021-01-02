@@ -4,6 +4,6 @@ A TODO starter project using Node and MongoDB for the backend with native iOS an
 
 Web           |  iOS
 :-------------------------:|:-------------------------:
-!![](webScreenshot.png)  |  ![](iOSScreenshot.png)
+![](webScreenshot.png)  |  ![](iOSScreenshot.png)
 
 
