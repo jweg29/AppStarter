@@ -16,6 +16,8 @@
 		1ACA5F0525A01202007E88DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACA5F0325A01202007E88DB /* LaunchScreen.storyboard */; };
 		1ACA5F1025A01202007E88DB /* TodoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5F0F25A01202007E88DB /* TodoTests.swift */; };
 		1ACA5F1B25A01202007E88DB /* TodoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5F1A25A01202007E88DB /* TodoUITests.swift */; };
+		1AD03EA225A0193F0017A3B0 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD03EA125A0193F0017A3B0 /* Todo.swift */; };
+		1AD03EAA25A019570017A3B0 /* ServiceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD03EA925A019570017A3B0 /* ServiceHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		1ACA5F1625A01202007E88DB /* TodoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ACA5F1A25A01202007E88DB /* TodoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoUITests.swift; sourceTree = "<group>"; };
 		1ACA5F1C25A01202007E88DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AD03EA125A0193F0017A3B0 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
+		1AD03EA925A019570017A3B0 /* ServiceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,14 +105,16 @@
 		1ACA5EF425A01200007E88DB /* Todo */ = {
 			isa = PBXGroup;
 			children = (
-				1ACA5EF525A01200007E88DB /* AppDelegate.swift */,
-				1ACA5EF725A01200007E88DB /* SceneDelegate.swift */,
-				1ACA5EF925A01200007E88DB /* TodoListViewController.swift */,
 				1ACA5EFB25A01200007E88DB /* Main.storyboard */,
 				1ACA5F0125A01202007E88DB /* Assets.xcassets */,
 				1ACA5F0325A01202007E88DB /* LaunchScreen.storyboard */,
 				1ACA5F0625A01202007E88DB /* Info.plist */,
 				1ACA5EFE25A01200007E88DB /* Todo.xcdatamodeld */,
+				1ACA5EF525A01200007E88DB /* AppDelegate.swift */,
+				1ACA5EF725A01200007E88DB /* SceneDelegate.swift */,
+				1AD03E9B25A018FF0017A3B0 /* ViewControllers */,
+				1AD03EA025A019180017A3B0 /* Network */,
+				1AD03E9F25A0190C0017A3B0 /* Models */,
 			);
 			path = Todo;
 			sourceTree = "<group>";
@@ -129,6 +135,38 @@
 				1ACA5F1C25A01202007E88DB /* Info.plist */,
 			);
 			path = TodoUITests;
+			sourceTree = "<group>";
+		};
+		1AD03E9B25A018FF0017A3B0 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1AD03EB125A019C80017A3B0 /* TodoList */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		1AD03E9F25A0190C0017A3B0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1AD03EA125A0193F0017A3B0 /* Todo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1AD03EA025A019180017A3B0 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				1AD03EA925A019570017A3B0 /* ServiceHandler.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		1AD03EB125A019C80017A3B0 /* TodoList */ = {
+			isa = PBXGroup;
+			children = (
+				1ACA5EF925A01200007E88DB /* TodoListViewController.swift */,
+			);
+			path = TodoList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,9 +300,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1ACA5EFA25A01200007E88DB /* TodoListViewController.swift in Sources */,
+				1AD03EAA25A019570017A3B0 /* ServiceHandler.swift in Sources */,
 				1ACA5EF625A01200007E88DB /* AppDelegate.swift in Sources */,
 				1ACA5EF825A01200007E88DB /* SceneDelegate.swift in Sources */,
 				1ACA5F0025A01200007E88DB /* Todo.xcdatamodeld in Sources */,
+				1AD03EA225A0193F0017A3B0 /* Todo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
