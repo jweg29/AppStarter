@@ -15,14 +15,31 @@ final class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
+        self.refreshControl = UIRefreshControl(frame: .zero, primaryAction: UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.fetchTodos()
+            self.refreshControl?.endRefreshing()
+        }))
         
-        fetchTodos()
+        self.fetchTodos()
     }
     
     private func fetchTodos() {
-        serviceHandler.fetchTodos { [weak self] (results) in
-            self?.todos = results
-            self?.tableView.reloadData()
+        serviceHandler.fetchTodos { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let todos):
+                self.todos = todos
+            case .failure(let error):
+                print(error)
+                let alertVC = UIAlertController(title: "Error Loading Todos", message: error.localizedDescription, preferredStyle: .alert)
+                alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alertVC, animated: true, completion: nil)
+            }
+            
+            self.tableView.reloadData()
         }
     }
     
@@ -48,5 +65,9 @@ final class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
