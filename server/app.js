@@ -18,27 +18,27 @@ const todoSchema = new mongoose.Schema({
     required: true,
   },
 });
-const List = mongoose.model('Todo', todoSchema);
+const Todo = mongoose.model('Todo', todoSchema);
 
 // Routes
 
 app.get('/api/todo', (request, response) => {
   console.log('/todo GET');
-  List.find((error, lists) => {
+  Todo.find((error, todos) => {
     if (error) {
       return response.status(500).send(error);
     }
-    return response.status(200).send(lists);
+    return response.status(200).send(todos);
   });
 }).post('/api/todo', (request, response) => {
   console.log('/todo POST');
   const { name } = request.body;
   if (name) {
-    const newList = new List({
+    const newTodo = new Todo({
       name,
     });
-    newList.save();
-    response.status(201).send(newList);
+    newTodo.save();
+    response.status(201).send(newTodo);
   } else {
     response.status(400).send('Missing name parameter');
   }
@@ -48,16 +48,16 @@ app.get('/api/todo', (request, response) => {
   const { name } = request.body;
 
   if (id) {
-    List.findById(id, (error, result) => {
+    Todo.findById(id, (error, result) => {
       if (error) {
         response.status(500).send(error);
       }
 
-      const list = result;
-      if (list) {
-        list.name = name;
-        list.save();
-        response.status(200).send(list);
+      const todo = result;
+      if (todo) {
+        todo.name = name;
+        todo.save();
+        response.status(200).send(todo);
       } else {
         response.status(404).send('Todo with ID not found');
       }
@@ -71,13 +71,13 @@ app.get('/api/todo', (request, response) => {
   console.log(id);
 
   if (id) {
-    List.findByIdAndRemove(id, (error, result) => {
+    Todo.findByIdAndRemove(id, (error, result) => {
       if (error) {
         response.status(500).send(error);
       }
 
-      const list = result;
-      if (list) {
+      const todo = result;
+      if (todo) {
         response.status(200).send('Todo deleted'.json);
       } else {
         response.status(404).send('Todo with ID not found'.json);
