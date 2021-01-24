@@ -7,20 +7,48 @@
 
 import UIKit
 
-final class TodoListViewController: UITableViewController {
+final class TodoListViewController: UIViewController {
     private var todos = [Todo]()
     private let serviceHandler = ServiceHandler()
     private let cellIdentifier = "TodoListCell"
+    private var selectedTodos = Set<Todo>()
+    
+    private var contentView = TodoListView()
+    private var editButton: UIBarButtonItem?
+    private var createTodoButton: UIBarButtonItem?
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.contentView.tableView.delegate = self
+        self.contentView.tableView.dataSource = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.tableFooterView = UIView()
-        self.refreshControl = UIRefreshControl(frame: .zero, primaryAction: UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            self.fetchTodos()
-            self.refreshControl?.endRefreshing()
-        }))
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.title = NSLocalizedString("Todo", comment: "")
         
+        self.view.addSubview(self.contentView)
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.contentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.contentView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.contentView.topAnchor.constraint(equalTo: self.view.topAnchor),
+        ])
+        
+        self.editButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(toggleEditMode))
+        self.navigationItem.rightBarButtonItem = self.editButton
+        
+        self.createTodoButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentCreateTodoModal))
+        self.navigationItem.leftBarButtonItem = self.createTodoButton
+        
+        self.updateEditButtonDisplay()
         self.fetchTodos()
     }
     
@@ -33,19 +61,60 @@ final class TodoListViewController: UITableViewController {
             case .failure(let error):
                 print(error)
                 let alertVC = UIAlertController(title: "Error Loading Todos", message: error.localizedDescription, preferredStyle: .alert)
-                alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                alertVC.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                     self.dismiss(animated: true, completion: nil)
                 }))
                 self.present(alertVC, animated: true, completion: nil)
             }
             
-            self.tableView.reloadData()
+            self.contentView.tableView.reloadData()
         }
     }
     
-    // MARK: UITableView protocols
+    @objc private func presentCreateTodoModal() {
+        let alertController = UIAlertController(title: "New Todo", message: nil, preferredStyle: .alert)
+        alertController.addTextField { textField in
+            textField.placeholder = NSLocalizedString("Todo", comment: "")
+        }
+        alertController.addAction(.init(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.serviceHandler.createTodo(withName: alertController.textFields?.first?.text ?? "", completionHandler: { result in
+                switch result {
+                case .failure(let error):
+                    let alertVC = UIAlertController(title: NSLocalizedString("Error Adding Todo", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                    alertVC.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                        self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alertVC, animated: true, completion: nil)
+                case .success:
+                    self.fetchTodos()
+                }
+            })
+        }))
+        alertController.addAction(.init(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+        }))
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @objc private func toggleEditMode() {
+        self.contentView.tableView.setEditing(!self.contentView.tableView.isEditing, animated: true)
+        self.updateEditButtonDisplay()
+        self.contentView.toggleToolbarVisibility(visible: self.contentView.tableView.isEditing && selectedTodos.count > 0)
+        if !self.contentView.tableView.isEditing {
+            selectedTodos.removeAll()
+        }
+    }
+    
+    private func updateEditButtonDisplay() {
+        self.editButton?.title = self.contentView.tableView.isEditing ? NSLocalizedString("Done", comment: "") : NSLocalizedString("Edit", comment: "")
+        self.editButton?.style = self.contentView.tableView.isEditing ? .done : .plain
+    }
+}
+
+extension TodoListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         if let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) {
             cell = dequeuedCell
@@ -58,16 +127,47 @@ final class TodoListViewController: UITableViewController {
         return cell
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            self.selectedTodos.insert(self.todos[indexPath.row])
+            self.contentView.toggleToolbarVisibility(visible: self.contentView.tableView.isEditing && selectedTodos.count > 0)
+        } else {
+            // TODO: Present edit todo view
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            self.selectedTodos.remove(self.todos[indexPath.row])
+            self.contentView.toggleToolbarVisibility(visible: self.contentView.tableView.isEditing && selectedTodos.count > 0)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let todo = self.todos[indexPath.row]
+        self.serviceHandler.deleteTodo(withId: todo._id, completionHandler: { result in
+            switch result {
+            case .failure(let error):
+                let alertVC = UIAlertController(title: NSLocalizedString("Error Deleting Todo", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                alertVC.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alertVC, animated: true, completion: nil)
+            case .success:
+                self.fetchTodos()
+            }
+        })
+    }
+}
+
+extension TodoListViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
         
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
