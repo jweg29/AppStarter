@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A3ED4F825BE2A0A00A8D5B9 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ED4F725BE2A0A00A8D5B9 /* TodoListView.swift */; };
 		1ACA5EF625A01200007E88DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5EF525A01200007E88DB /* AppDelegate.swift */; };
 		1ACA5EF825A01200007E88DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5EF725A01200007E88DB /* SceneDelegate.swift */; };
 		1ACA5EFA25A01200007E88DB /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5EF925A01200007E88DB /* TodoListViewController.swift */; };
-		1ACA5EFD25A01200007E88DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACA5EFB25A01200007E88DB /* Main.storyboard */; };
 		1ACA5F0025A01200007E88DB /* Todo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1ACA5EFE25A01200007E88DB /* Todo.xcdatamodeld */; };
 		1ACA5F0225A01202007E88DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACA5F0125A01202007E88DB /* Assets.xcassets */; };
 		1ACA5F0525A01202007E88DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACA5F0325A01202007E88DB /* LaunchScreen.storyboard */; };
@@ -38,11 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A3ED4F725BE2A0A00A8D5B9 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		1ACA5EF225A01200007E88DB /* Todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ACA5EF525A01200007E88DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1ACA5EF725A01200007E88DB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1ACA5EF925A01200007E88DB /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
-		1ACA5EFC25A01200007E88DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1ACA5EFF25A01200007E88DB /* Todo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Todo.xcdatamodel; sourceTree = "<group>"; };
 		1ACA5F0125A01202007E88DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ACA5F0425A01202007E88DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -105,7 +105,6 @@
 		1ACA5EF425A01200007E88DB /* Todo */ = {
 			isa = PBXGroup;
 			children = (
-				1ACA5EFB25A01200007E88DB /* Main.storyboard */,
 				1ACA5F0125A01202007E88DB /* Assets.xcassets */,
 				1ACA5F0325A01202007E88DB /* LaunchScreen.storyboard */,
 				1ACA5F0625A01202007E88DB /* Info.plist */,
@@ -165,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				1ACA5EF925A01200007E88DB /* TodoListViewController.swift */,
+				1A3ED4F725BE2A0A00A8D5B9 /* TodoListView.swift */,
 			);
 			path = TodoList;
 			sourceTree = "<group>";
@@ -274,7 +274,6 @@
 			files = (
 				1ACA5F0525A01202007E88DB /* LaunchScreen.storyboard in Resources */,
 				1ACA5F0225A01202007E88DB /* Assets.xcassets in Resources */,
-				1ACA5EFD25A01200007E88DB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +302,7 @@
 				1AD03EAA25A019570017A3B0 /* ServiceHandler.swift in Sources */,
 				1ACA5EF625A01200007E88DB /* AppDelegate.swift in Sources */,
 				1ACA5EF825A01200007E88DB /* SceneDelegate.swift in Sources */,
+				1A3ED4F825BE2A0A00A8D5B9 /* TodoListView.swift in Sources */,
 				1ACA5F0025A01200007E88DB /* Todo.xcdatamodeld in Sources */,
 				1AD03EA225A0193F0017A3B0 /* Todo.swift in Sources */,
 			);
@@ -340,14 +340,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1ACA5EFB25A01200007E88DB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1ACA5EFC25A01200007E88DB /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1ACA5F0325A01202007E88DB /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
