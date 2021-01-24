@@ -8,14 +8,63 @@
 import Foundation
 
 struct ServiceHandler {
-    private enum Endpoints: String {
-        case fetchTodo = "todo"
-        
-        func url(forEnv env: Env) -> URL? {
+    private enum HTTPMethod: String {
+        case get = "GET"
+        case post = "POST"
+        case put = "PUT"
+        case delete = "DELETE"
+    }
+    
+    private enum Endpoints {
+        case fetchTodo
+        case deleteTodo(todoId: String)
+        case createTodo(todoName: String)
+
+        func path()-> String {
             switch self {
             case .fetchTodo:
-                return URL(string: env.host + rawValue)
+                return "todo"
+            case .deleteTodo:
+                return "todo"
+            case .createTodo:
+                return "todo"
             }
+        }
+        
+        func httpMethod()-> String {
+            switch self {
+            case .fetchTodo:
+                return HTTPMethod.get.rawValue
+            case .deleteTodo:
+                return HTTPMethod.delete.rawValue
+            case .createTodo:
+                return HTTPMethod.post.rawValue
+            }
+        }
+        
+        func url(forEnv env: Env) -> URL? {
+            return URL(string: env.host + path())
+        }
+        
+        func request(forEnv env: Env) -> URLRequest? {
+            guard let url = self.url(forEnv: env) else {
+                return nil
+            }
+            
+            var urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30)
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpMethod = self.httpMethod()
+
+            switch self {
+            case .fetchTodo:
+                break
+            case .deleteTodo(let todoId):
+                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["id": todoId], options: [])
+            case .createTodo(let todoName):
+                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["name": todoName], options: [])
+            }
+            
+            return urlRequest
         }
     }
     
@@ -30,7 +79,6 @@ struct ServiceHandler {
         }
     }
         
-    private let timeoutInterval: TimeInterval = 30
     private let env: Env
     private let session = URLSession(configuration: .default)
     
@@ -39,13 +87,11 @@ struct ServiceHandler {
     }
         
     func fetchTodos(completionHandler: @escaping (Result<[Todo], Error>) -> ()) {
-        guard let url = Endpoints.fetchTodo.url(forEnv: self.env) else {
+        guard let urlRequest = Endpoints.fetchTodo.request(forEnv: self.env) else {
             assertionFailure("Could not form URL for fetchTodo")
             return
         }
-        
-        let urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: timeoutInterval)
-        
+
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
             guard error == nil, let data = data else {
                 print("Error fetching todos: \(String(describing: error))")
@@ -61,6 +107,58 @@ struct ServiceHandler {
 
             DispatchQueue.main.async {
                 completionHandler(.success((try? JSONDecoder().decode([Todo].self, from: data)) ?? []))
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func deleteTodo(withId todoId: String, completionHandler: @escaping (Result<Void, Error>) -> ()) {
+        guard let urlRequest = Endpoints.deleteTodo(todoId: todoId).request(forEnv: self.env) else {
+            assertionFailure("Could not form URL for deleteTodo")
+            return
+        }
+        
+        let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard error == nil else {
+                print("Error deleting todo: \(String(describing: error))")
+                DispatchQueue.main.async {
+                    if let error = error {
+                        completionHandler(.failure(error))
+                    } else {
+                        completionHandler(.success(()))
+                    }
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completionHandler(.success(()))
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func createTodo(withName todoName: String, completionHandler: @escaping (Result<Void, Error>) -> ()) {
+        guard let urlRequest = Endpoints.createTodo(todoName: todoName).request(forEnv: self.env) else {
+            assertionFailure("Could not form URL for deleteTodo")
+            return
+        }
+        
+        let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard error == nil else {
+                print("Error creating todo: \(String(describing: error))")
+                DispatchQueue.main.async {
+                    if let error = error {
+                        completionHandler(.failure(error))
+                    } else {
+                        completionHandler(.success(()))
+                    }
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completionHandler(.success(()))
             }
         }
         dataTask.resume()
