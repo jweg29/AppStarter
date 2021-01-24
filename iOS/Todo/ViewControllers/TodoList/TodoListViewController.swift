@@ -31,7 +31,7 @@ final class TodoListViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
-        self.navigationItem.title = NSLocalizedString("Todo", comment: "")
+        self.navigationItem.title = NSLocalizedString("Todo ✅", comment: "")
         
         self.view.addSubview(self.contentView)
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
