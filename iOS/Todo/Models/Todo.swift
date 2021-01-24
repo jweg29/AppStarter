@@ -7,6 +7,7 @@
 
 import Foundation
 
-struct Todo: Codable {
+struct Todo: Codable, Hashable {
+    let _id: String
     let name: String
 }
