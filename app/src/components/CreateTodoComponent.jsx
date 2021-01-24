@@ -43,12 +43,12 @@ function CreateTodo(props) {
         <input
           id="name"
           name="name"
-          placeholder="List name"
+          placeholder="Todo"
           onChange={didUpdateInput}
           autoComplete="off"
         />
         <button type="button" onClick={didTapCreate}>
-          Create
+          Add
         </button>
       </form>
     </div>

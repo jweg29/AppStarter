@@ -15,10 +15,12 @@ function Todo(props) {
 
   return (
     <div className="Todo">
-      <p>{props.todo.name}</p>
-      <button type="button" onClick={didTapDeleteButton}>
-        Delete
-      </button>
+      <p className="todo-p">{props.todo.name}</p>
+      <div className="todo-button">
+        <button type="button" onClick={didTapDeleteButton}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

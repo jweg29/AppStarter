@@ -22,7 +22,7 @@ class App extends React.Component {
   }
 
   createTodoComponent(todo) {
-    // TODO: Resolve warning
+    // TODO: Resolve bind warning
     return (
       <Todo
         key={todo._id}
@@ -88,8 +88,12 @@ class App extends React.Component {
       <div className="App">
         <header className="App-header">
           <h1>Todo ✅</h1>
-          {/* TODO: Resolve warning */}
-          <CreateTodo didTapCreate={this.didTapCreateTodo.bind(this)} />
+        </header>
+        {/* TODO: Resolve bind warning */}
+        <div className="container">
+          <div className="CreateTodo">
+            <CreateTodo didTapCreate={this.didTapCreateTodo.bind(this)} />
+          </div>
           <div className="TodoList">
             <p>{this.state.error}</p>
             <h3>Todos</h3>
@@ -99,7 +103,11 @@ class App extends React.Component {
               ))}
             </ul>
           </div>
-        </header>
+        </div>
+        <div className="footer">
+          <a href="https://github.com/jweg29/AppStarter">Todo</a>
+          <p className="footer-p">by James Wegner</p>
+        </div>
       </div>
     );
   }

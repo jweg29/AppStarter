@@ -1,37 +1,111 @@
+body {
+  background-color: #0E0F12; 
+}
+
+a {
+  color: #61dafb;
+}
+
+a:visited {
+  color: #61dafb;
+}
+
+input {
+  font-size: 20px;
+  padding: 4px
+}
+
+button {
+  font-size: 20px;
+  margin-left: 8px;
+}
+
 .App {
   text-align: center;
+  min-height: 100%;
 }
 
-.Todo {
-  background-color: gray;
-  padding: 10px;
-  margin: 10px;
+.App h3 {
+  font-size: 28px;
 }
-
-.TodoList {
-  margin-top: 40px;
-}
-
-.TodoList ul {
-  list-style: none;
-}
-
-.TodoList li {
-  float: left;
-  min-width: 200px;
-} 
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  background-color: #282c34;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.Todo {
+  background-color: gray;
+  padding: 10px;
+  margin: 10px;
+  font-size: 24px;
+  border: 1px solid transparent;
+}
+
+.Todo:hover {
+  border: 1px solid #61dafb;
+}
+
+.todo-p {
+  display: inline;
+  padding-right: 20px;
+  text-align: left;
+}
+
+.todo-button {
+  display: inline;
+  text-align: right;
+  float: right;
+}
+
+.CreateTodo {
+  color: white;
+  float: right;
+  width: 30%;
+  background-color: #282c34;
+  padding: 10px;
+  margin-right: 20px;
+  padding-bottom: 30px;
+  border-radius: 24px;
+}
+
+.TodoList {
+  border-radius: 24px;
+  padding: 10px;
+  margin-top: 40px;
+  color: white;
+  width: 60%;
+  margin-left: 20px;
+  background-color: #282c34;
+}
+
+.TodoList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer {
+  position: absolute;
+  align-items: center;
+  width: 100%;
+  color: white;
+  background-color: #282c34;
+  font-size: 20px;
+  bottom: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.footer-p {
+  padding-left: 10px;
+  display: inline;
 }
