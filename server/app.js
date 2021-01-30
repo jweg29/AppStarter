@@ -67,24 +67,25 @@ app.get('/api/todo', (request, response) => {
   }
 }).delete('/api/todo', (request, response) => {
   console.log('/todo DELETE');
-  const { id } = request.body;
-  console.log(id);
+  const { ids } = request.body;
 
-  if (id) {
-    Todo.findByIdAndRemove(id, (error, result) => {
-      if (error) {
-        response.status(500).send(error);
-      }
+  if (ids) {
+    ids.forEach((id) => {
+      Todo.findByIdAndRemove(id, (error, result) => {
+        if (error) {
+          response.status(500).send(error);
+        }
 
-      const todo = result;
-      if (todo) {
-        response.status(200).send('Todo deleted'.json);
-      } else {
-        response.status(404).send('Todo with ID not found'.json);
-      }
+        const todo = result;
+        if (todo) {
+          response.status(200).send('Todo deleted'.json);
+        } else {
+          response.status(404).send('Todo with ID not found'.json);
+        }
+      });
     });
   } else {
-    response.status(400).send('Missing ID parameter');
+    response.status(400).send('Missing IDS parameter');
   }
 });
 

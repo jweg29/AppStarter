@@ -17,7 +17,7 @@ struct ServiceHandler {
     
     private enum Endpoints {
         case fetchTodo
-        case deleteTodo(todoId: String)
+        case deleteTodo(todoIds: [String])
         case createTodo(todoName: String)
 
         func path()-> String {
@@ -58,8 +58,8 @@ struct ServiceHandler {
             switch self {
             case .fetchTodo:
                 break
-            case .deleteTodo(let todoId):
-                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["id": todoId], options: [])
+            case .deleteTodo(let todoIds):
+                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["ids": todoIds], options: [])
             case .createTodo(let todoName):
                 urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["name": todoName], options: [])
             }
@@ -112,8 +112,8 @@ struct ServiceHandler {
         dataTask.resume()
     }
     
-    func deleteTodo(withId todoId: String, completionHandler: @escaping (Result<Void, Error>) -> ()) {
-        guard let urlRequest = Endpoints.deleteTodo(todoId: todoId).request(forEnv: self.env) else {
+    func deleteTodo(with todoIds: [String], completionHandler: @escaping (Result<Void, Error>) -> ()) {
+        guard let urlRequest = Endpoints.deleteTodo(todoIds: todoIds).request(forEnv: self.env) else {
             assertionFailure("Could not form URL for deleteTodo")
             return
         }

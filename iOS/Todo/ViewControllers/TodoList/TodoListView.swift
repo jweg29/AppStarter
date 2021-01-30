@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol TodoListViewDelegate: class {
+    func didTapCompleteTasks()
+}
+
 final class TodoListView: UIView {
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -32,15 +36,19 @@ final class TodoListView: UIView {
     } ()
     
     lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Complete", style: .done, target: nil, action: nil)
+        let button = UIBarButtonItem(title: "Complete", style: .done, target: self, action: #selector(deleteSelectedTasks))
         return button
     }()
+
+    private weak var delegate: TodoListViewDelegate?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init() {
+    init(delegate: TodoListViewDelegate) {
+        self.delegate = delegate
+
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         
@@ -69,5 +77,9 @@ final class TodoListView: UIView {
         UIView.animate(withDuration: 0.25) {
             self.toolbar.isHidden = !visible
         }
+    }
+    
+    @objc private func deleteSelectedTasks() {
+        self.delegate?.didTapCompleteTasks()
     }
 }

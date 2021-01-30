@@ -13,7 +13,7 @@ final class TodoListViewController: UIViewController {
     private let cellIdentifier = "TodoListCell"
     private var selectedTodos = Set<Todo>()
     
-    private var contentView = TodoListView()
+    private lazy var contentView = TodoListView(delegate: self)
     private var editButton: UIBarButtonItem?
     private var createTodoButton: UIBarButtonItem?
     
@@ -146,7 +146,7 @@ extension TodoListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let todo = self.todos[indexPath.row]
-        self.serviceHandler.deleteTodo(withId: todo._id, completionHandler: { result in
+        self.serviceHandler.deleteTodo(with: [todo._id], completionHandler: { result in
             switch result {
             case .failure(let error):
                 let alertVC = UIAlertController(title: NSLocalizedString("Error Deleting Todo", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
@@ -169,5 +169,24 @@ extension TodoListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
+    }
+}
+
+extension TodoListViewController: TodoListViewDelegate {
+    func didTapCompleteTasks() {
+        guard let selectedRowIndexPaths = self.contentView.tableView.indexPathsForSelectedRows else { return }
+        let idsToDelete = selectedRowIndexPaths.map({ self.todos[$0.row]._id })
+        self.serviceHandler.deleteTodo(with: idsToDelete) { result in
+            switch result {
+            case .failure(let error):
+                let alertVC = UIAlertController(title: NSLocalizedString("Error Deleting Todo", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                alertVC.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alertVC, animated: true, completion: nil)
+            case .success:
+                self.fetchTodos()
+            }
+        }
     }
 }
