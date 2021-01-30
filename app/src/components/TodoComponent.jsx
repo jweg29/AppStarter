@@ -18,7 +18,7 @@ function Todo(props) {
       <p className="todo-p">{props.todo.name}</p>
       <div className="todo-button">
         <button type="button" onClick={didTapDeleteButton}>
-          Delete
+          Complete
         </button>
       </div>
     </div>
