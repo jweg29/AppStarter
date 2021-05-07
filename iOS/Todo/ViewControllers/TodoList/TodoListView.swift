@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol TodoListViewDelegate: class {
+protocol TodoListViewDelegate: AnyObject {
     func didPullToRefresh()
     func didTapCompleteTasks()
 }
