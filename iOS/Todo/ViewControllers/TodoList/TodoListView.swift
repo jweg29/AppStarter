@@ -25,7 +25,6 @@ final class TodoListView: UIView {
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl(frame: .zero, primaryAction: UIAction(handler: { [weak self] _ in
             self?.delegate?.didPullToRefresh()
-            self?.refreshControl.endRefreshing()
         }))
         return refreshControl
     }()

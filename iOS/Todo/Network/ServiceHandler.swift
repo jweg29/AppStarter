@@ -93,19 +93,17 @@ struct ServiceHandler {
         }
 
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
-            guard error == nil, let data = data else {
-                print("Error fetching todos: \(String(describing: error))")
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                guard error == nil, let data = data else {
+                    print("Error fetching todos: \(String(describing: error))")
                     if let error = error {
                         completionHandler(.failure(error))
                     } else {
                         completionHandler(.success([]))
                     }
+                    return
                 }
-                return
-            }
-
-            DispatchQueue.main.async {
+                
                 completionHandler(.success((try? JSONDecoder().decode([Todo].self, from: data)) ?? []))
             }
         }
@@ -119,19 +117,17 @@ struct ServiceHandler {
         }
         
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
-            guard error == nil else {
-                print("Error deleting todo: \(String(describing: error))")
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    print("Error deleting todo: \(String(describing: error))")
                     if let error = error {
                         completionHandler(.failure(error))
                     } else {
                         completionHandler(.success(()))
                     }
+                    return
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {
+                
                 completionHandler(.success(()))
             }
         }
@@ -145,19 +141,17 @@ struct ServiceHandler {
         }
         
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
-            guard error == nil else {
-                print("Error creating todo: \(String(describing: error))")
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    print("Error creating todo: \(String(describing: error))")
                     if let error = error {
                         completionHandler(.failure(error))
                     } else {
                         completionHandler(.success(()))
                     }
+                    return
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {
+                
                 completionHandler(.success(()))
             }
         }
