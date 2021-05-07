@@ -58,13 +58,17 @@ final class TodoListViewController: UIViewController {
             switch result {
             case .success(let todos):
                 self.todos = todos
+                self.contentView.refreshControl.endRefreshing()
             case .failure(let error):
                 print(error)
                 let alertVC = UIAlertController(title: "Error Loading Todos", message: error.localizedDescription, preferredStyle: .alert)
                 alertVC.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                     self.dismiss(animated: true, completion: nil)
+
                 }))
-                self.present(alertVC, animated: true, completion: nil)
+                self.present(alertVC, animated: true, completion: {
+                    self.contentView.refreshControl.endRefreshing()
+                })
             }
             
             self.contentView.tableView.reloadData()
@@ -188,5 +192,9 @@ extension TodoListViewController: TodoListViewDelegate {
                 self.fetchTodos()
             }
         }
+    }
+    
+    func didPullToRefresh() {
+        fetchTodos()
     }
 }
