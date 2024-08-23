@@ -1,9 +1,7 @@
 # AppStarter
 
-A TODO starter project using Node and MongoDB with native iOS and React clients.
+A collection of starter projects for common app designs across native iOS, android, and web clients and using NextJS hosted on Vercel for a backend.
 
-Web           |  iOS
-:-------------------------:|:-------------------------:
-![](webScreenshot.png)  |  ![](iOSScreenshot.png)
+### NetworkMapList
 
-
+A map with a expandable and scrollable list overlay that can fetch and display data from a server.
