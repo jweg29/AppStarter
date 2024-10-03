@@ -1,6 +1,6 @@
 # AppStarter
 
-A collection of starter projects for common app designs across native iOS, android, and web clients and using NextJS hosted on Vercel for a backend.
+A collection of starter projects for common app designs across native iOS, android, and web clients. Using NextJS, Vercel, and Supabase for backend/database infra.
 
 ### NetworkMapList
 
